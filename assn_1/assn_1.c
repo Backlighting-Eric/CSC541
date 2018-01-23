@@ -110,10 +110,10 @@ int get_file_size(FILE *inp){
 }
 
 void disk_linear_search(FILE *key,FILE *seek,int key_size,int seek_size,int *seek_array,int *hit){
-		int k;
-		for(int i=0;i<seek_size;++i){
+		int k,i,j;
+		for(i=0;i<seek_size;++i){
 			int target=*(seek_array+i);
-			for(int j=0;j<key_size;++j){
+			for(j=0;j<key_size;++j){
 				fread(&k,sizeof(int),1,key);
 				if(k==target){
 					*(hit+i)=1;
@@ -126,8 +126,8 @@ void disk_linear_search(FILE *key,FILE *seek,int key_size,int seek_size,int *see
 }
 
 void disk_binary_search(FILE *key,FILE *seek,int key_size,int seek_size,int *seek_array,int *hit){
-	int k;
-	for(int i=0;i<seek_size;++i){
+	int k,i;
+	for(i=0;i<seek_size;++i){
 		int left=0,right=key_size-1;
 		int target=*(seek_array+i);
 		int mid;
@@ -154,7 +154,8 @@ void disk_binary_search(FILE *key,FILE *seek,int key_size,int seek_size,int *see
 }
 
 void mem_binary_search(FILE *key,FILE *seek,int key_size,int seek_size,int *key_array,int *seek_array,int *hit){
-	for(int i=0;i<seek_size;++i){
+	int i;
+	for(i=0;i<seek_size;++i){
 		int left=0,right=key_size-1;
 		int target=*(seek_array+i);
 		int mid;
@@ -177,9 +178,9 @@ void mem_binary_search(FILE *key,FILE *seek,int key_size,int seek_size,int *key_
 }
 
 void mem_linear_search(FILE *key,FILE *seek,int key_size,int seek_size,int *key_array,int *seek_array,int *hit){
-
-	for(int i=0;i<seek_size;++i){
-		for(int j=0;j<key_size;++j){
+	int i,j;
+	for(i=0;i<seek_size;++i){
+		for(j=0;j<key_size;++j){
 			if(*(seek_array+i)==*(key_array+j)){
 				*(hit+i)=1;
 				break;
@@ -191,7 +192,8 @@ void mem_linear_search(FILE *key,FILE *seek,int key_size,int seek_size,int *key_
 }
 
 void print_yes_no(int *seek_array,int seek_size,int *hit){
-	for(int i=0;i<seek_size;++i){
+	int i;
+	for(i=0;i<seek_size;++i){
 		if(*(hit+i)){
 			printf("%12d: Yes\n",*(seek_array+i));
 		}
