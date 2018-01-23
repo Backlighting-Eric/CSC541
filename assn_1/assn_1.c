@@ -85,7 +85,7 @@ free_and_close(key,seek,seek_array,hit);
 	printf("Microseconds: %d\n",end.tv_usec);
 	*/
 
-	printf("Time: %ld.%06ld",end.tv_sec-start.tv_sec,end.tv_usec-start.tv_usec);
+	printf("Time: %ld.%06ld\n",end.tv_sec-start.tv_sec,end.tv_usec-start.tv_usec);
 	return 0;
 
 }
