@@ -27,7 +27,7 @@ int main(int argc,char *argv[]){
 		exit(1);
 	}
 
-	struct timeval start,end;
+	struct timeval start,end,diff;
 
 	FILE *key=fopen(argv[2],"rb");
 	FILE *seek=fopen(argv[3],"rb");
@@ -75,7 +75,16 @@ exit(1);
 }
 free_and_close(key,seek,seek_array,hit);
 
+/* time end*/
 	gettimeofday(&end,NULL);
+
+	diff.tv_sec=end.tv_sec-start.tv_sec;
+	diff.tv_usec=end.tv_usec-start.tv_usec;
+	if(diff.tv_usec<0){
+		diff.tv_usec+=1000000;
+		diff.tv_sec--;
+	}
+	
 
 /*
 	printf("Seconds: %d\n",start.tv_sec);
@@ -85,7 +94,7 @@ free_and_close(key,seek,seek_array,hit);
 	printf("Microseconds: %d\n",end.tv_usec);
 	*/
 
-	printf("Time: %ld.%06ld\n",end.tv_sec-start.tv_sec,end.tv_usec-start.tv_usec);
+	printf("Time: %ld.%06ld\n",diff.tv_sec,diff.tv_usec);
 	return 0;
 
 }
