@@ -104,11 +104,15 @@ Sorted keys must be written to sort.bin as binary integers. C's built-in file wr
 #include <stdio.h>
 
 FILE *fp;                  /* Output file stream */
+
 int   output_buf[ 1000 ];  /* Output buffer */
 
 fp = fopen( "sort.bin", "wb" );
+
 fwrite( output_buf, sizeof( int ), 1000, fp );
+
 fclose( fp );
+
 Your program must also print the total execution time for the mergesort it performs as a single line on-screen. Assuming the execution time is held in a timeval struct called exec_tm, use the following printf statement to do this.
 
 
