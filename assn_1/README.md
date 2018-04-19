@@ -90,7 +90,7 @@ All programs must be written in C, and compiled to run on the remote.eos.ncsu.ed
 Reading Binary Integers
 C's built-in file operations allow you to easily read integer data stored in a binary file. For example, the following code snippet opens a binary integer file for input and reads three integers: the first integer in the file, the third integer from the start of the file, and the second integer from the end of the file.
 
-
+```
 #include <stdio.h>
 
 FILE *inp;          /* Input file stream */
@@ -105,10 +105,11 @@ fread( &k2, sizeof( int ), 1, inp )
 
 fseek( inp, -2 * sizeof( int ), SEEK_END );
 fread( &k3, sizeof( int ), 1, inp )
+```
 Measuring Time
 The simplest way to measure execution time is to use gettimeofday() to query the current time at appropriate locations in your program.
 
-
+```
 #include <sys/time.h>
 
 struct timeval tm;
@@ -116,17 +117,20 @@ struct timeval tm;
 gettimeofday( &tm, NULL );
 printf( "Seconds: %d\n", tm.tv_sec );
 printf( "Microseconds: %d\n", tm.tv_usec );
+```
 Comparing tv_sec and tv_usec for two timeval structs will allow you to measure the amount of time that's passed between two gettimeofday() calls.
 
 Writing Results
 Results for each key in S[i], and the total time needed to perform all searching, must be written to the console before your program terminates. The format of your output must conform to the following rules.
 
 Print one line for each S[i] in the order it occurs in seek.db. The line must contain the value of S[i] padded to be twelve characters wide, a colon and a space, and the text Yes if hit[i]==1 (key found) or the text No if hit[i]=0 (key not found). The simplest way to do this is to use a printf statement, for example:
-
+```
 printf( "%12d: Yes", S[i] );
+```
 Print the total execution time for your program's search operations as a single line with the label Time: followed by a space, and the execution time in seconds and microseconds. Assuming the execution time is stored in a timeval struct called exec_tm, you can use a printf statement to do this.
-
+```
 printf( "Time: %ld.%06ld", exec_tm.tv_sec, exec_tm.tv_usec );
+```
 You can capture your program's results for further examination or validation by redirecting its output to an external file, for example, to a file called output.txt, as follows.
 
 assn_1 --mem-lin key.db seek.db > output.txt
