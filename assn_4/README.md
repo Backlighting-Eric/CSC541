@@ -20,7 +20,7 @@ Note. If you are asked open an existing index file, you can assume the B-tree or
 B-Tree Nodes
 Your program is allowed to hold individual B-tree nodes in memory—but not the entire tree—at any given time. Your B-tree node should have a structure and usage similar to the following.
 
-
+```
 #include <stdlib.h>
 
 int order = 4;    /* B-tree order */
@@ -36,22 +36,25 @@ btree_node node;  /* Single B-tree node */
 node.n = 0;
 node.key = (int *) calloc( order - 1, sizeof( int ) );
 node.child = (long *) calloc( order, sizeof( long ) );
+```
 Note. Be careful when you're reading and writing data structures with dynamically allocated memory. For example, trying to write node like this
 
-
+```
 fwrite( &node, sizeof( btree_node ), 1, fp );
+```
 will write node's key count, the pointer value for its key array, and the pointer value for its child offset array, but it will not write the contents of the key and child offset arrays. The arrays' contents and not pointers to their contents need to be written explicitly instead.
 
-
+```
 fwrite( &node.n, sizeof( int ), 1, fp );
 fwrite( node.key, sizeof( int ), order - 1, fp );
 fwrite( node.child, sizeof( long ), order, fp );
+```
 Reading node structures from disk would use a similar strategy.
 
 Root Node Offset
 In order to manage any tree, you need to locate its root node. Initially the root node will be stored near the front of index.bin. If the root node splits, however, a new root will be appended to the end of index.bin. The root node's offset will be maintained persistently by storing it at the front of index.bin when the file is closed, and reading it when the file is opened.
 
-
+```
 #include <stdio.h>
 
 FILE *fp;    /* Input file stream */
@@ -69,6 +72,7 @@ if ( fp == NULL ) {
 } else {
   fread( &root, sizeof( long ), 1, fp );
 }
+```
 User Interface
 The user will communicate with your program through a set of commands typed at the keyboard. Your program must support four simple commands:
 
@@ -105,7 +109,7 @@ on-screen.
 Print
 This command prints the contents of the B-tree on-screen, level by level. Begin by considering a single B-tree node. To print the contents of the node on-screen, print its key values separated by commas.
 
-
+```
 int         i;      /* Loop counter */
 btree_node  node;   /* Node to print */
 long        off;    /* Node's offset */
@@ -114,6 +118,7 @@ for( i = 0; i < node.n - 1; i++ ) {
   printf( "%d,", node.key[ i ] );
 }
 printf( "%d", node.key[ node.n - 1 ] );
+```
 To print the entire tree, start by printing the root node. Next, print the root node's children on a new line, separating each child node's output by a space character. Then, print their children on a new line, and so on until all the nodes in the tree are printed. This approach prints the nodes on each level of the B-tree left-to-right on a common line.
 
 For example, inserting the integers 1 through 13 inclusive into an order-4 B-tree would produce the following output.

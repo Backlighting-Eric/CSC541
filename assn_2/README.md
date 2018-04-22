@@ -20,7 +20,7 @@ Records will be variable-length, and will be stored one after another in a binar
 
 Note. Read the above description of the record size carefully! It is stored as binary data in a manner similar to how integer data were stored and retrieved in Assignment 1. It is not appropriate to store the size as an ASCII string. For example, if you wanted to read a record at file offset off in a file referenced through a FILE stream fp, it would be done as:
 
-
+```
 #include <stdio.h>
 
 char *buf;      /* Buffer to hold student record */
@@ -43,6 +43,7 @@ if ( ( fp = fopen( "student.db", "r+b" ) ) == NULL ) {
   buf = malloc( rec_siz );
   fread( buf, 1, rec_siz, fp );
 }
+```
 Writing a new record uses a similar, reverse procedure. First, convert the record's body into a character buffer with fields delimited by |. Next, seek to the appropriate position in the student file and write an integer representing the buffer's size in bytes, in binary, using fwrite(). Finally, write the buffer to the file with fwrite().
 
 Program Execution
@@ -64,18 +65,19 @@ Note. If you are asked open an existing student file, you can assume the availab
 In-Memory Primary Key Index
 In order to improve search efficiency, a primary key index will be maintained in memory as a reference to each record stored in the file. For our records, SID will act as a primary key. This means each entry in your index will have a structure similar to:
 
-
+```
 typedef struct {
   int key;   /* Record's key */
   long off;  /* Record's offset in file */
 } index_S;
+```
 Index entries should be stored in a collection that supports direct access and dynamic expansion. One good choice is a dynamically-expandable array. Index entries must be sorted in ascending key order, with the smallest key is at the front of the index and the largest key is at the end. This will allow you to use a binary search to find a target key in the index.
 
 The index will not be re-built every time the student file is re-opened. Instead, it will be maintained in a permanent form on-disk. As your program exits, you will write your index to disk, saving its contents in an index file. When you re-open the student file, you will load the corresponding index file, immediately reconstructing your primary key index. The index will have exactly the same state as before, and will be ready to use to access records in the student file.
 
 You can use any format you want to store each key–offset pair the index file. The simplest approach is to read and write the entire structure as binary data using fread() and fwrite(), for example
 
-
+```
 #include <stdio.h>
 
 typedef struct {
@@ -89,16 +91,18 @@ index_S  prim[ 50 ];  /* Primary key index */
 out = fopen( "index.bin", "wb" );
 fwrite( prim, sizeof( index_S ), 50, out );
 fclose( out );
+```
 Note. To simplify your program, you can assume the primary key index will never need to store more than 10,000 key–offset pairs.
 
 In-Memory Availability List
 When records are deleted from the file, rather than closing the hole that forms (an expensive operation), we will simply record the size and the offset of the hole in an in-memory availability list. Each entry in your availability list will have a structure similar to:
 
-
+```
 typedef struct {
   int siz;   /* Hole's size */
   long off;  /* Hole's offset in file */
 } avail_S;
+```
 Note. To simplify your program, you can assume the availability list will never need to store more than 10,000 size–offset pairs.
 
 The availability list will not be re-built every time the student file is re-opened. Instead, similar to the primary index, it will be maintained in a permanent form on-disk. As your program exits, you will write your availability list to disk, saving its contents in an availability list file. When you re-open the student file, you will load the corresponding availability list file, immediately reconstructing your availability list.
@@ -185,15 +189,18 @@ All programs must be written in C, and compiled to run on the remote.eos.ncsu.ed
 
 Writing Results
 When your program ends, you must print the contents of your index and availability lists. For the index entries, print a line containing the text Index: followed by one line for each key–offset pair, using the following format.
-
+```
 printf( "key=%d: offset=%ld\n", index[i].key, index[i].off );
+```
 Next, for the availability list entries, print a line containing the text Availability: followed by one line for each size–offset pair, using the following format.
-
+```
 printf( "size=%d: offset=%ld\n", avail[i].siz, avail[i].off );
+```
 Finally, you must determine the number of holes hole_n in your availability list, and the total amount of space hole_siz occupied by all the holes (i.e., the sum of the sizes of each hole). These two values should be printed using the following format.
-
+```
 printf( "Number of holes: %d\n", hole_n );
 printf( "Hole space: %d\n", hole_siz );
+```
 This will allow you to compare the efficiency of different availability list orderings to see whether they offer better or worse performance, in terms of the number of holes they create, and the amount of space they waste within the student file.
 
 Your assignment will be run automatically, and the output it produces will be compared to known, correct output using diff. Because of this, your output must conform to the above requirements exactly. If it doesn't, diff will report your output as incorrect, and it will be marked accordingly.

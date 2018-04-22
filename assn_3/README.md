@@ -87,7 +87,7 @@ All programs must be written in C, and compiled to run on the remote.eos.ncsu.ed
 Measuring Time
 The simplest way to measure execution time is to use gettimeofday() to query the current time at appropriate locations in your program.
 
-
+```
 #include <sys/time.h>
 
 struct timeval tm;
@@ -95,12 +95,13 @@ struct timeval tm;
 gettimeofday( &tm, NULL );
 printf( "Seconds: %d\n", tm.tv_sec );
 printf( "Microseconds: %d\n", tm.tv_usec );
+```
 Comparing tv_sec and tv_usec for two timeval structs will allow you to measure the amount of time that's passed between two gettimeofday() calls.
 
 Writing Results
 Sorted keys must be written to sort.bin as binary integers. C's built-in file writing operations allow this to be done very easily.
 
-
+```
 #include <stdio.h>
 
 FILE *fp;                  /* Output file stream */
@@ -112,7 +113,7 @@ fp = fopen( "sort.bin", "wb" );
 fwrite( output_buf, sizeof( int ), 1000, fp );
 
 fclose( fp );
-
+```
 Your program must also print the total execution time for the mergesort it performs as a single line on-screen. Assuming the execution time is held in a timeval struct called exec_tm, use the following printf statement to do this.
 
 
