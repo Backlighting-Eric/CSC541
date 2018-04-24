@@ -4,7 +4,7 @@ if [ ! -e assn_4 ];then
 	gcc ./assn_4.c -o assn_4
 fi
 
-./assn_4 index.bin 4 < ./inputLarge.txt > outputL
+./assn_4 index.bin 10 < ./inputLarge.txt > outputL
 
 diff ./outputL outputLarge.txt
 
